@@ -1,0 +1,105 @@
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+	<link rel="stylesheet" type="text/css" href="style/main.css"/>
+        <script type="text/javascript" src="style/jquery.js"></script>
+        <script type="text/javascript">
+            function debug($text){
+                console.log($text);
+            }
+            function resize_height(){
+
+            //console.log( "debug- "+$('.wrapper').height() );
+                var element = document.getElementsByClassName("row-small");
+                var max_height = 0;
+                $('.mainheight').each(function(e) {
+                h = $(this).height();
+                    if(typeof(h) != "undefined") {
+                        if(h > max_height) {
+                            max_height = h;
+                        }
+                    }
+                });
+                wrapper = 0;
+                if($('.wrapper2').height() != 0){
+                    wrapper = $('.wrapper2').height();
+                }
+                debug(h);
+                console.log("wrapper2-" + wrapper);
+                if(max_height > 0) {
+                    //$('.overflow-hidden').height(max_height + wrapper);
+                    $('.wrapper').height(max_height - 6 + wrapper);
+                    $('.variabel').height(max_height - 470);
+                    $('.variabel-second').height(max_height  - 356);
+                }
+
+            }
+            function getProduct(product){
+                onload(product, 'product-container');
+            }
+            function getContent(page){
+                onload(page, 'main-content');
+            }
+            function onload(page, divname){
+                var xmlHttp = null;
+              // Mozilla, Opera, Safari sowie Internet Explorer 7
+              if (typeof XMLHttpRequest != 'undefined') {
+                  xmlHttp = new XMLHttpRequest();
+              }
+              if (!xmlHttp) {
+                  // Internet Explorer 6 und älter
+                  try {
+                      xmlHttp  = new ActiveXObject("Msxml2.XMLHTTP");
+                  } catch(e) {
+                      try {
+                          xmlHttp  = new ActiveXObject("Microsoft.XMLHTTP");
+                      } catch(e) {
+                          xmlHttp  = null;
+                      }
+                  }
+              }
+              if (xmlHttp) {
+                  xmlHttp.open('GET', page+'?cache=2ssosjjdshfjkhfshjk2', true);
+                  xmlHttp.onreadystatechange = function () {
+                      if (xmlHttp.readyState == 4) {
+                          console.log('#main-content log: ' + $('#main-content').width());
+                          if(page == 'products.html' && ($('#main-content').width() >= 1000 ) ){
+                              
+                              onload('product_j.html', 'product-container');
+                              console.log ($('.mainheight').height());
+                              $('.mainheight').height(700);
+                              $('#main-content').css({'overflow' :'hidden'});
+                              //$('#sh').animate({ height: 1000, width: 1200 }, 2000, function(){});
+                              $('#products').css({'visibility': 'visible', 'display': 'inline'});
+                              $('#products').animate({ top: -700, right:0, opacity: 0.9 }, 1300, function(){});
+                          }else{
+                              var oldContent = document.getElementById(divname).innerHTML;
+                                document.getElementById(divname).innerHTML = (xmlHttp.responseText);
+                          resize_height();
+                          $(window).resize(resize_height);
+                          
+                          }
+
+                      }
+                  };
+                  xmlHttp.send(null);
+              }
+            
+            }
+// product-container
+                
+            </script>
+    </head>
+    <body onload="onload('start.html', 'main-content')">
+        <div id="main-content">
+        
+        </div>
+    </body>
+</html>
